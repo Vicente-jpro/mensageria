@@ -16,10 +16,10 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/default")
+@RequiredArgsConstructor
 public class DefaultController {
 
-    @Autowired
-    private AmqpTemplate defaultExchange;
+    private final AmqpTemplate defaultExchange;
 
     @PostMapping
     public DefaultMessageDto enviarParaFila(@RequestBody DefaultMessageDto defaultMessageDto) {
