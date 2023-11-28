@@ -1,14 +1,45 @@
 package com.example.mensageria.config;
 
 import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.PostConstruct;
 
-@Component
-@RequiredArgsConstructor
+@Configuration
 public class DefaultExchangeConfig {
 
+    @Autowired
     private AmqpAdmin amqpAdmin;
-    private final String DEFAULT_QUEUE;
+
+    @Value("${mq.queues.default}")
+    private String DEFAULT_QUEUE;
+
+    public Queue createQueue() {
+        return new Queue(DEFAULT_QUEUE, true, false, false);
+    }
+
+    @Bean
+    public AmqpTemplate defaultExchange(
+            ConnectionFactory connectionFactory, MessageConverter messageConverter) {
+
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(messageConverter);
+        rabbitTemplate.setRoutingKey(DEFAULT_QUEUE);
+
+        return rabbitTemplate;
+    }
+
+    @PostConstruct
+    public void init() {
+        amqpAdmin.declareQueue(createQueue());
+    }
 }
