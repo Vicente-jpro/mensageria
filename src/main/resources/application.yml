@@ -18,9 +18,16 @@ rabbitmq:
     default: default-queue
     direct-1: direct-queue-1
     direct-2: direct-queue-2
+    fanout-1: fanout-queue-1
+    fanout-2: fanout-queue-2
+
 
   direct: 
     exchange: direct-exchange # Exchange proprieties
     # Routing keys
     routing-key-1: direct-routing-key-1
     routing-key-2: direct-routing-key-2
+
+  fanout:
+    exchange: fanout-exchange
+
