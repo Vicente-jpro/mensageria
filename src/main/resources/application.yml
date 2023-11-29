@@ -4,12 +4,23 @@ spring:
   jpa:
     show-sql: true
     generate-ddl: true
+
+# Rabbitmq connection
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
 
-mq:
+# Queue names
+rabbitmq:
   queues: 
-    default: default
+    default: default-queue
+    direct-1: direct-queue-1
+    direct-2: direct-queue-2
+
+  direct: 
+    exchange: direct-exchange # Exchange proprieties
+    # Routing keys
+    routing-key-1: direct-routing-key-1
+    routing-key-2: direct-routing-key-2

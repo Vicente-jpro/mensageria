@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DefaultMessageDto {
+public class MessageDto {
 
     private String type;
     private LocalDateTime localDateTime;

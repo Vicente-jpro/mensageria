@@ -3,15 +3,13 @@ package com.example.mensageria.controllers;
 import java.time.LocalDateTime;
 
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mensageria.dto.DefaultMessageDto;
+import com.example.mensageria.dto.MessageDto;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -22,7 +20,7 @@ public class DefaultController {
     private final AmqpTemplate defaultExchange;
 
     @PostMapping
-    public DefaultMessageDto enviarParaFila(@RequestBody DefaultMessageDto defaultMessageDto) {
+    public MessageDto enviarParaFila(@RequestBody MessageDto defaultMessageDto) {
         defaultMessageDto.setLocalDateTime(LocalDateTime.now());
 
         defaultExchange.convertAndSend(defaultMessageDto);
