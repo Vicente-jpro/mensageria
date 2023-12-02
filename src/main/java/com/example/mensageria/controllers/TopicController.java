@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TopicController {
 
-    private AmqpTemplate topicExchange;
+    private final AmqpTemplate topicExchange;
 
     @PostMapping("/{key}")
     public MessageDto sendMessageWithTopicExchage(
