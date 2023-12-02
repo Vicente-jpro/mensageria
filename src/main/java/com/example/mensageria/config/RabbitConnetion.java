@@ -1,5 +1,6 @@
 package com.example.mensageria.config;
 
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -42,6 +43,23 @@ public class RabbitConnetion {
     public MessageConverter messageConverter() {
         ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
         return new Jackson2JsonMessageConverter(objectMapper);
+    }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory listenerContainerFactory() {
+        SimpleRabbitListenerContainerFactory listenerContainerFactory = new SimpleRabbitListenerContainerFactory();
+
+        listenerContainerFactory.setConnectionFactory(connectionFactory());
+        listenerContainerFactory.setMessageConverter(messageConverter());
+        // Max number of consumer
+        listenerContainerFactory.setMaxConcurrentConsumers(10);
+        // Max concurrent consumer
+        listenerContainerFactory.setConcurrentConsumers(5);
+        // Listen the aplication initialization
+        listenerContainerFactory.setAutoStartup(true);
+        // How many messages going to be sent to the consumer at the same time
+        listenerContainerFactory.setPrefetchCount(10);
+        return listenerContainerFactory;
     }
 
 }
