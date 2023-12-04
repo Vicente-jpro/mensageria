@@ -1,8 +1,10 @@
 package com.example.mensageria.config;
 
+import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +61,17 @@ public class RabbitConnetion {
         listenerContainerFactory.setAutoStartup(true);
         // How many messages going to be sent to the consumer at the same time
         listenerContainerFactory.setPrefetchCount(10);
+
+        /*
+         * listenerContainerFactory.setAdviceChain(
+         * RetryInterceptorBuilder.stateless()
+         * .maxAttempts(3)
+         * .recoverer(new RejectAndDontRequeueRecoverer())
+         * .build());
+         */
+        // If there is a problem, don't re-queue. Send send then to the Dead Letter
+        // Exchang (DLX)
+        // listenerContainerFactory.setDefaultRequeueRejected(false);
         return listenerContainerFactory;
     }
 
